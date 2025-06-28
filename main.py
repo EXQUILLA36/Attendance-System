@@ -16,6 +16,9 @@ class main:
         self.mainWindow.geometry("1080x600")
         self.mainWindow.configure(corner_radius=15)
 
+        self.attendance_log = {}
+
+        # CODE-AND-NAMES
         self.employeeNames = {
             "AATS - 0001": "AL-ROSHD MANUEL ABLAZA",
             "AATS - 0002": "ASIAVELLE TIAMA ABLAZA",
@@ -34,17 +37,67 @@ class main:
             "AATS - 0015": "JEFF ROGAS",
         }
 
-        self.img = customtkinter.CTkImage(                                                  # --IMAGE LOADER--                          IMAGE
+        # IMAGES
+        self.default = customtkinter.CTkImage(                                                  # --IMAGE LOADER--                          IMAGE
             light_image=Image.open("./Images/default.png"),
             size=(250,250),
         )
-
+        self.AATS0001 = customtkinter.CTkImage(  # --IMAGE LOADER--                          IMAGE
+            light_image=Image.open("./Images/AATS-0001.jpg"),
+            size=(250, 250),
+        )
+        self.AATS0004 = customtkinter.CTkImage(  # --IMAGE LOADER--                          IMAGE
+            light_image=Image.open("./Images/AATS-0004.jpg"),
+            size=(250, 250),
+        )
         self.AATS0005 = customtkinter.CTkImage(  # --IMAGE LOADER--                          IMAGE
             light_image=Image.open("./Images/AATS-0005.jpg"),
             size=(250, 250),
         )
+        self.AATS0006 = customtkinter.CTkImage(  # --IMAGE LOADER--                          IMAGE
+            light_image=Image.open("./Images/AATS-0006.jpg"),
+            size=(250, 250),
+        )
+        self.AATS0007 = customtkinter.CTkImage(  # --IMAGE LOADER--                          IMAGE
+            light_image=Image.open("./Images/AATS-0007.jpg"),
+            size=(250, 250),
+        )
+        self.AATS0008 = customtkinter.CTkImage(  # --IMAGE LOADER--                          IMAGE
+            light_image=Image.open("./Images/AATS-0008.jpg"),
+            size=(250, 250),
+        )
+        self.AATS0011 = customtkinter.CTkImage(  # --IMAGE LOADER--                          IMAGE
+            light_image=Image.open("./Images/AATS-0011.jpg"),
+            size=(250, 250),
+        )
+        self.AATS0012 = customtkinter.CTkImage(  # --IMAGE LOADER--                          IMAGE
+            light_image=Image.open("./Images/AATS-0012.jpg"),
+            size=(250, 250),
+        )
+        self.AATS0014 = customtkinter.CTkImage(  # --IMAGE LOADER--                          IMAGE
+            light_image=Image.open("./Images/AATS-0014.jpg"),
+            size=(250, 250),
+        )
+        self.AATS0015 = customtkinter.CTkImage(  # --IMAGE LOADER--                          IMAGE
+            light_image=Image.open("./Images/AATS-0015.jpg"),
+            size=(250, 250),
+        )
 
+        # CODE-AND-IMAGES
+        self.employeeImages = {
+            "AATS - 0001": self.AATS0001,
+            "AATS - 0004": self.AATS0004,
+            "AATS - 0005": self.AATS0005,
+            "AATS - 0006": self.AATS0006,
+            "AATS - 0007": self.AATS0007,
+            "AATS - 0008": self.AATS0008,
+            "AATS - 0011": self.AATS0011,
+            "AATS - 0012": self.AATS0012,
+            "AATS - 0014": self.AATS0014,
+            "AATS - 0015": self.AATS0015
+        }
         self.mainWindowFrame()
+
 
     def on_entry_change(self, *args):
         self.value = self.entry_var.get()
@@ -100,7 +153,7 @@ class main:
     def personEntryInfo(self):                                                              # --USER DISPLAY--                          FUNCTION
         self.imageContainer = customtkinter.CTkLabel(
             self.windowFrame,
-            image=self.img,
+            image=self.default,
             corner_radius=100,
             text=""
         )
@@ -111,6 +164,7 @@ class main:
             text_color="#ffffff",
             font=("Arial", 24),
             width=50,
+            justify="center",
             text="FIRST NAME MIDDLE NAME LASt NAME"
         )
         self.employeeName.configure(wraplength=400)
@@ -119,35 +173,29 @@ class main:
 
 
     def employeeChecking(self):
-        if self.value == "AATS - 0005":
-            self.imageContainer.configure(image=self.AATS0005)
+        try:
+            if self.value in self.employeeNames.keys():
+                if self.value in self.employeeImages.keys():
+                    self.employeeName.configure(text=self.employeeNames.get(self.value))
+                    self.imageContainer.configure(image=self.employeeImages.get(self.value))
+                    self.inCode.delete(0, 'end')
 
+                    self.now = datetime.now()
+                    self.time = self.now.strftime("%I:%M %p")
+                    self.date = self.now.strftime("%d-%m-%Y")
 
-        if self.value in self.employeeNames.keys():
-            self.employeeName.configure(text=self.employeeNames.get(self.value))
-            self.name = self.employeeNames.get(self.value)
-            self.attendance_log = {}
+                    if self.value not in self.attendance_log:
+                        self.attendance_log[self.value] = [{self.time: self.date}]
+                        for log, now in self.attendance_log.items():
+                            print(log, now)
+                    else:
+                        print("EMPLOYEE ALREADY LOGGED IN")
 
-            if self.value not in self.attendance_log:
-                self.attendance_log[self.value] = []
+        except Exception as e:
+            print("SYSTEM ERROR:", e)
 
-            logs = self.attendance_log[self.value]
-            self.now = datetime.now()
-            self.now_time = self.now.strftime("%I:%M")
-            self.now_timestamp = self.now.strftime("%Y-%m-%d %H:%M:%S")
-
-            if len(logs) % 2 == 0:
-                logs.append({"type": "IN", "Time In": self.now_time, "timestamp": self.s
-            else:
-                logs.append({"type": "OUT", "Time Out": self.now_time, "timestamp": self.now_timestamp})
-                print(f"{self.name} TIME OUT at {self.now_time}")
-        # for key, value in self.employeeNames.items():
-        #     print(key, value)
-        if not os.path.exists("attendance"):
-            os.mkdir("attendance")
-
-
-
+    # if not os.path.exists("attendance"):
+    #     os.mkdir("attendance")
 
     def display(self):
         self.scrollableDisplay = customtkinter.CTkScrollableFrame(
