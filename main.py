@@ -100,8 +100,9 @@ class main:
 
 
     def on_entry_change(self, *args):
-        self.value = self.entry_var.get()
-        print(self.value)
+        self.timeIn = self.in_var.get()
+        self.timeOut = self.out_var.get()
+        print(self.timeIn)
         self.employeeChecking()
 
     def mainWindowFrame(self):
@@ -128,22 +129,26 @@ class main:
         )
         self.displayFrame.place(relx=0.685, rely=0.5, x=0, y=0, anchor="center")
 
-        self.entry_var = ctk.StringVar()
-        self.entry_var.trace_add("write", self.on_entry_change)
+        self.in_var = ctk.StringVar()
+        self.in_var.trace_add("write", self.on_entry_change)
 
         self.inCode = customtkinter.CTkEntry(                                               # --TIME IN ENTRY BOX--                     ENTRY
             self.inputFrame,
             width= 350, height=80,
             placeholder_text="TIME IN",
-            textvariable=self.entry_var,
+            textvariable=self.in_var,
             font=("Arial", 24)
         )
         self.inCode.place(relx=0.06, rely=0.1)
+
+        self.out_var = ctk.StringVar()
+        self.out_var.trace_add("write", self.on_entry_change)
 
         self.outCode = customtkinter.CTkEntry(                                              # --TIME OUT FRAME--                        ENTRY
             self.inputFrame,
             width=350, height=80,
             placeholder_text="TIME OUT",
+            textvariable=self.out_var,
             font=("Arial", 24)
         )
         self.outCode.place(relx=0.06, rely=0.3)
