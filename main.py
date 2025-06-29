@@ -17,6 +17,7 @@ class main:
         self.mainWindow.configure(corner_radius=15)
 
         self.attendance_log = {}
+        self.attendance_status = {}
 
         # CODE-AND-NAMES
         self.employeeNames = {
@@ -98,11 +99,12 @@ class main:
         }
         self.mainWindowFrame()
 
+        for keys in self.employeeNames.keys():
+            self.attendance_status[keys] = "absent"
+
 
     def on_entry_change(self, *args):
         self.timeIn = self.in_var.get()
-        self.timeOut = self.out_var.get()
-        print(self.timeIn)
         self.employeeChecking()
 
     def mainWindowFrame(self):
@@ -144,14 +146,6 @@ class main:
         self.out_var = ctk.StringVar()
         self.out_var.trace_add("write", self.on_entry_change)
 
-        self.outCode = customtkinter.CTkEntry(                                              # --TIME OUT FRAME--                        ENTRY
-            self.inputFrame,
-            width=350, height=80,
-            placeholder_text="TIME OUT",
-            textvariable=self.out_var,
-            font=("Arial", 24)
-        )
-        self.outCode.place(relx=0.06, rely=0.3)
 
         self.personEntryInfo()
 
@@ -175,29 +169,40 @@ class main:
         self.employeeName.configure(wraplength=400)
         self.employeeName.place(relx=0.04, rely=0.5)
 
+        self.display()
 
 
     def employeeChecking(self):
         try:
-            if self.value in self.employeeNames.keys():
-                if self.value in self.employeeImages.keys():
-                    self.employeeName.configure(text=self.employeeNames.get(self.value))
-                    self.imageContainer.configure(image=self.employeeImages.get(self.value))
+            if self.timeIn in self.employeeNames.keys():
+                if self.timeIn in self.employeeImages.keys():
+                    self.employeeName.configure(text=self.employeeNames.get(self.timeIn))
+                    self.imageContainer.configure(image=self.employeeImages.get(self.timeIn))
                     self.inCode.delete(0, 'end')
 
                     self.now = datetime.now()
                     self.time = self.now.strftime("%I:%M %p")
                     self.date = self.now.strftime("%d-%m-%Y")
 
-                    if self.value not in self.attendance_log:
-                        self.attendance_log[self.value] = [{self.time: self.date}]
-                        for log, now in self.attendance_log.items():
-                            print(log, now)
-                    else:
-                        print("EMPLOYEE ALREADY LOGGED IN")
+                    if self.attendance_status.get(self.timeIn) == "absent":
+                        self.attendance_status[self.timeIn] = "present"
+                        self.attendance_log[self.timeIn] = [{self.time: self.date}]
+                        for code, record in self.attendance_log.items():
+                            for log in record:
+                                for time, date in log.items():
+                                    print(f"{self.employeeNames.get(self.timeIn)}: TIMED IN {time} - {date}")
+
+                    elif self.attendance_status.get(self.timeIn) == "present":
+                        self.attendance_status[self.timeIn] = "absent"
+                        self.attendance_log[self.timeIn] = [{self.time: self.date}]
+                        for code, record in self.attendance_log.items():
+                            for log in record:
+                                for time, date in log.items():
+                                    print(f"{self.employeeNames.get(self.timeIn)}: TIMED OUT {time} - {date}")
 
         except Exception as e:
             print("SYSTEM ERROR:", e)
+
 
     # if not os.path.exists("attendance"):
     #     os.mkdir("attendance")
@@ -205,10 +210,32 @@ class main:
     def display(self):
         self.scrollableDisplay = customtkinter.CTkScrollableFrame(
             self.displayFrame,
-            height=1080, width=400,
-            bg_color="#ffffff"
+            height=560, width=700,
         )
-        self.scrollableDisplay.grid(row=0, column=0)
+        self.scrollableDisplay.place(relx=0, rely=0.1, anchor="nw")
+
+        for code, name in self.employeeNames.items():  # Add many widgets to make it scrollable
+            self.personFrame = ctk.CTkFrame(
+                self.scrollableDisplay,
+                height=200, width=670,
+                fg_color="#ffffff"
+            )
+            self.personFrame.pack(pady=5, anchor="w")
+
+            self.imgLbl = customtkinter.CTkLabel(
+                self.personFrame,
+                image=self.employeeImages.get(code),
+                text=""
+            )
+            self.imgLbl.place(relx=0.2, rely=0.5, anchor="center")
+
+            self.nameLbl = customtkinter.CTkLabel(
+                self.personFrame,
+                text_color="#000000",
+                text=name
+            )
+            self.nameLbl.place(relx=0.5, rely=0.5, anchor="center")
+
 
     def run(self):
         self.mainWindow.mainloop()
