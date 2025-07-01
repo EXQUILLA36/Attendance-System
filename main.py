@@ -8,6 +8,9 @@ from pathlib import Path
 from PIL import Image, ImageTk
 import os
 from datetime import datetime, timedelta
+import json
+import pandas as pd
+import tkinter.messagebox as messagebox
 
 class main:
     def __init__(self):
@@ -15,92 +18,56 @@ class main:
         self.mainWindow.title("ABLAZA ATTENDANCE SYSTEM")
         self.mainWindow.geometry("1080x600")
         self.mainWindow.configure(corner_radius=15)
+        self.mainWindow.protocol("WM_DELETE_WINDOW", self.on_exit)
 
         self.attendance_log = {}
         self.attendance_status = {}
 
-        # CODE-AND-NAMES
-        self.employeeNames = {
-            "AATS - 0001": "AL-ROSHD MANUEL ABLAZA",
-            "AATS - 0002": "ASIAVELLE TIAMA ABLAZA",
-            "AATS - 0003": "ACE ZANDE G. CACHO",
-            "AATS - 0004": "BRYAN JAMES FAJARDO",
-            "AATS - 0005": "TRIZTAN DALE S VERZOSA",
-            "AATS - 0006": "CHRISTIAN JADE TALABO",
-            "AATS - 0007": "MAYNARD ANTHONY DANTES VALDEZ",
-            "AATS - 0008": "ALDAVE DE JESUS LOZADA",
-            "AATS - 0009": "KENJI S CA-ANG",
-            "AATS - 0010": "MARK KENNETH G. CACHO",
-            "AATS - 0011": "BENEDICT FLORES SALES",
-            "AATS - 0012": "JUNRAIN PANSOy",
-            "AATS - 0013": "MARIC BELASANO",
-            "AATS - 0014": "PAULO SAYSAY ORTEGA",
-            "AATS - 0015": "JEFF ROGAS",
-        }
-
-        # IMAGES
-        self.default = customtkinter.CTkImage(                                                  # --IMAGE LOADER--                          IMAGE
+        self.default = customtkinter.CTkImage(  # --IMAGE LOADER--                          IMAGE
             light_image=Image.open("./Images/default.png"),
-            size=(250,250),
-        )
-        self.AATS0001 = customtkinter.CTkImage(  # --IMAGE LOADER--                          IMAGE
-            light_image=Image.open("./Images/AATS-0001.jpg"),
-            size=(250, 250),
-        )
-        self.AATS0004 = customtkinter.CTkImage(  # --IMAGE LOADER--                          IMAGE
-            light_image=Image.open("./Images/AATS-0004.jpg"),
-            size=(250, 250),
-        )
-        self.AATS0005 = customtkinter.CTkImage(  # --IMAGE LOADER--                          IMAGE
-            light_image=Image.open("./Images/AATS-0005.jpg"),
-            size=(250, 250),
-        )
-        self.AATS0006 = customtkinter.CTkImage(  # --IMAGE LOADER--                          IMAGE
-            light_image=Image.open("./Images/AATS-0006.jpg"),
-            size=(250, 250),
-        )
-        self.AATS0007 = customtkinter.CTkImage(  # --IMAGE LOADER--                          IMAGE
-            light_image=Image.open("./Images/AATS-0007.jpg"),
-            size=(250, 250),
-        )
-        self.AATS0008 = customtkinter.CTkImage(  # --IMAGE LOADER--                          IMAGE
-            light_image=Image.open("./Images/AATS-0008.jpg"),
-            size=(250, 250),
-        )
-        self.AATS0011 = customtkinter.CTkImage(  # --IMAGE LOADER--                          IMAGE
-            light_image=Image.open("./Images/AATS-0011.jpg"),
-            size=(250, 250),
-        )
-        self.AATS0012 = customtkinter.CTkImage(  # --IMAGE LOADER--                          IMAGE
-            light_image=Image.open("./Images/AATS-0012.jpg"),
-            size=(250, 250),
-        )
-        self.AATS0014 = customtkinter.CTkImage(  # --IMAGE LOADER--                          IMAGE
-            light_image=Image.open("./Images/AATS-0014.jpg"),
-            size=(250, 250),
-        )
-        self.AATS0015 = customtkinter.CTkImage(  # --IMAGE LOADER--                          IMAGE
-            light_image=Image.open("./Images/AATS-0015.jpg"),
-            size=(250, 250),
+            size=(180, 180),
         )
 
-        # CODE-AND-IMAGES
-        self.employeeImages = {
-            "AATS - 0001": self.AATS0001,
-            "AATS - 0004": self.AATS0004,
-            "AATS - 0005": self.AATS0005,
-            "AATS - 0006": self.AATS0006,
-            "AATS - 0007": self.AATS0007,
-            "AATS - 0008": self.AATS0008,
-            "AATS - 0011": self.AATS0011,
-            "AATS - 0012": self.AATS0012,
-            "AATS - 0014": self.AATS0014,
-            "AATS - 0015": self.AATS0015
-        }
+        # CODE-AND-NAMES
+        employees = [
+            {"id": "AATS - 0001", "name": "AL-ROSHD MANUEL ABLAZA", "image": "./Images/AATS-0001.jpg"},
+            {"id": "AATS - 0002", "name": "ASIAVELLE TIAMA ABLAZA", "image": None},
+            {"id": "AATS - 0003", "name": "ACE ZANDE G. CACHO", "image": None},
+            {"id": "AATS - 0004", "name": "BRYAN JAMES FAJARDO", "image": "./Images/AATS-0004.jpg"},
+            {"id": "AATS - 0005", "name": "TRIZTAN DALE S VERZOSA", "image": "./Images/AATS-0005.jpg"},
+            {"id": "AATS - 0006", "name": "CHRISTIAN JADE TALABO", "image": "./Images/AATS-0006.jpg"},
+            {"id": "AATS - 0007", "name": "MAYNARD ANTHONY DANTES VALDEZ", "image": "./Images/AATS-0007.jpg"},
+            {"id": "AATS - 0008", "name": "ALDAVE DE JESUS LOZADA", "image": "./Images/AATS-0008.jpg"},
+            {"id": "AATS - 0009", "name": "KENJI S CA-ANG", "image": None},
+            {"id": "AATS - 0010", "name": "MARK KENNETH G. CACHO", "image": None},
+            {"id": "AATS - 0011", "name": "BENEDICT FLORES SALES", "image": "./Images/AATS-0011.jpg"},
+            {"id": "AATS - 0012", "name": "JUNRAIN PANSOy", "image": "./Images/AATS-0012.jpg"},
+            {"id": "AATS - 0013", "name": "MARIC BELASANO", "image": None},
+            {"id": "AATS - 0014", "name": "PAULO SAYSAY ORTEGA", "image": "./Images/AATS-0014.jpg"},
+            {"id": "AATS - 0015", "name": "JEFF ROGAS", "image": "./Images/AATS-0015.jpg"}
+        ]
+
+        with open("employees.json", "r") as f:
+            self.data = json.load(f)
+
+        self.employeeNames = {}
+        self.employeeImages = {}
+
+        for emp in self.data["employees"]:
+            emp_id = emp["id"]
+            self.employeeNames[emp_id] = emp["name"]
+
+            try:
+                if emp["image"]:
+                    img = customtkinter.CTkImage(light_image=Image.open(emp["image"]), size=(180, 180))
+                else:
+                    raise FileNotFoundError
+            except:
+                img = customtkinter.CTkImage(light_image=Image.open("./Images/default.png"), size=(180, 180))
+
+            self.employeeImages[emp_id] = img
+
         self.mainWindowFrame()
-
-        for keys in self.employeeNames.keys():
-            self.attendance_status[keys] = "absent"
 
 
     def on_entry_change(self, *args):
@@ -156,56 +123,51 @@ class main:
             corner_radius=100,
             text=""
         )
-        self.imageContainer.place(relx=0.15, rely=0.02)
+        self.imageContainer.place(relx=0.3, rely=0.18, anchor="center")
 
         self.employeeName = customtkinter.CTkLabel(
             self.windowFrame,
             text_color="#ffffff",
             font=("Arial", 24),
-            width=50,
-            justify="center",
-            text="FIRST NAME MIDDLE NAME LASt NAME"
+            justify="left",
+            text="FIRST NAME MIDDLE NAME LAST NAME"
         )
-        self.employeeName.configure(wraplength=400)
-        self.employeeName.place(relx=0.04, rely=0.5)
+        self.employeeName.configure(wraplength=350)
+        self.employeeName.place(relx=0.06, rely=0.35)
 
         self.display()
 
 
     def employeeChecking(self):
         try:
-            if self.timeIn in self.employeeNames.keys():
-                if self.timeIn in self.employeeImages.keys():
-                    self.employeeName.configure(text=self.employeeNames.get(self.timeIn))
-                    self.imageContainer.configure(image=self.employeeImages.get(self.timeIn))
-                    self.inCode.delete(0, 'end')
+            if self.timeIn in self.employeeNames:
+                self.employeeName.configure(text=self.employeeNames.get(self.timeIn))
+                self.imageContainer.configure(image=self.employeeImages.get(self.timeIn))
+                self.inCode.delete(0, 'end')
 
-                    self.now = datetime.now()
-                    self.time = self.now.strftime("%I:%M %p")
-                    self.date = self.now.strftime("%d-%m-%Y")
+                self.now = datetime.now()
+                self.time = self.now.strftime("%I:%M %p")
+                self.date = self.now.strftime("%d-%m-%Y")
 
-                    if self.attendance_status.get(self.timeIn) == "absent":
-                        self.attendance_status[self.timeIn] = "present"
-                        self.attendance_log[self.timeIn] = [{self.time: self.date}]
-                        for code, record in self.attendance_log.items():
-                            for log in record:
-                                for time, date in log.items():
-                                    print(f"{self.employeeNames.get(self.timeIn)}: TIMED IN {time} - {date}")
+                for emp in self.data["employees"]:
+                    if emp["id"] == self.timeIn:
+                        for log in emp["log"]:
+                            if log["status"] == "absent":
+                                log["date"] = self.date
+                                log["status"] = "present"
+                                log["timeIn"] = self.time
+                                print(f"{emp["id"]} name:{emp["name"]} Status: {log["status"]} - Timed In: {log["timeIn"]}")
+                            else:
+                                log["status"] = "absent"
+                                log["timeOut"] = self.time
+                            print(f"{emp["id"]} name:{emp["name"]} Status: {log["status"]} - Timed Out: {log["timeIn"]}")
 
-                    elif self.attendance_status.get(self.timeIn) == "present":
-                        self.attendance_status[self.timeIn] = "absent"
-                        self.attendance_log[self.timeIn] = [{self.time: self.date}]
-                        for code, record in self.attendance_log.items():
-                            for log in record:
-                                for time, date in log.items():
-                                    print(f"{self.employeeNames.get(self.timeIn)}: TIMED OUT {time} - {date}")
+                with open("employees.json", "w") as f:
+                    json.dump(self.data, f, indent=4)
 
         except Exception as e:
             print("SYSTEM ERROR:", e)
 
-
-    # if not os.path.exists("attendance"):
-    #     os.mkdir("attendance")
 
     def display(self):
         self.scrollableDisplay = customtkinter.CTkScrollableFrame(
@@ -214,7 +176,7 @@ class main:
         )
         self.scrollableDisplay.place(relx=0, rely=0.1, anchor="nw")
 
-        for code, name in self.employeeNames.items():  # Add many widgets to make it scrollable
+        for emp in self.data["employees"]:
             self.personFrame = ctk.CTkFrame(
                 self.scrollableDisplay,
                 height=200, width=670,
@@ -224,7 +186,7 @@ class main:
 
             self.imgLbl = customtkinter.CTkLabel(
                 self.personFrame,
-                image=self.employeeImages.get(code),
+                image=self.employeeImages.get(emp["id"]),
                 text=""
             )
             self.imgLbl.place(relx=0.2, rely=0.5, anchor="center")
@@ -232,13 +194,47 @@ class main:
             self.nameLbl = customtkinter.CTkLabel(
                 self.personFrame,
                 text_color="#000000",
-                text=name
+                text=self.employeeNames.get(emp["id"])
             )
             self.nameLbl.place(relx=0.5, rely=0.5, anchor="center")
 
+    def export_json_to_excel(self, json_path="employees.json", excel_path="attendance.xlsx"):
+        with open(json_path, "r") as f:
+            data = json.load(f)
+
+            flat_rows = []
+
+            for emp in data["employees"]:
+                for log in emp.get("log", []):
+                    flat_rows.append({
+                        "Employee ID": emp["id"],
+                        "Name": emp["name"],
+                        "Date": log.get("date", ""),
+                        "Status": log.get("status", ""),
+                        "Time In": log.get("timeIn", ""),
+                        "Time Out": log.get("timeOut", "")
+                    })
+
+                    df = pd.DataFrame(flat_rows)
+
+        try:
+            df.to_excel(excel_path, index=False)
+            return True
+        except PermissionError:
+            messagebox.showerror("Save Error",
+                                 f"Cannot save the file because {excel_path} is open.\nPlease close it and try again.")
+            print(f"CANNOT CLOSE APPLICATION AS THE {excel_path} EXCEL SHEET IS OPENED. PLEASE CLOSE THE EXCEL FIRST")
+            return False
 
     def run(self):
         self.mainWindow.mainloop()
+
+    def on_exit(self):
+        success = self.export_json_to_excel("employees.json", "attendance_export.xlsx")
+        if success:
+            self.mainWindow.destroy()
+        else:
+            pass
 
 if __name__ == "__main__":
     app = main()
