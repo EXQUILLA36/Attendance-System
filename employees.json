@@ -1,0 +1,199 @@
+{
+    "employees": [
+        {
+            "id": "AATS - 0001",
+            "name": "AL-ROSHD MANUEL ABLAZA",
+            "image": "./Images/AATS-0001.jpg",
+            "log": [
+                {
+                    "status": "absent",
+                    "date": "03-07-2025",
+                    "timeIn": "09:57 AM",
+                    "timeOut": "09:57 AM"
+                }
+            ]
+        },
+        {
+            "id": "AATS - 0002",
+            "name": "ASIAVELLE TIAMA ABLAZA",
+            "image": null,
+            "log": [
+                {
+                    "status": "absent",
+                    "date": "",
+                    "timeIn": "",
+                    "timeOut": ""
+                }
+            ]
+        },
+        {
+            "id": "AATS - 0003",
+            "name": "ACE ZANDE G. CACHO",
+            "image": null,
+            "log": [
+                {
+                    "status": "absent",
+                    "date": "",
+                    "timeIn": "",
+                    "timeOut": ""
+                }
+            ]
+        },
+        {
+            "id": "AATS - 0004",
+            "name": "BRYAN JAMES FAJARDO",
+            "image": "./Images/AATS-0004.jpg",
+            "log": [
+                {
+                    "status": "absent",
+                    "date": "",
+                    "timeIn": "",
+                    "timeOut": ""
+                }
+            ]
+        },
+        {
+            "id": "AATS - 0005",
+            "name": "TRIZTAN DALE S VERZOSA",
+            "image": "./Images/AATS-0005.jpg",
+            "log": [
+                {
+                    "status": "absent",
+                    "date": "03-07-2025",
+                    "timeIn": "09:50 AM",
+                    "timeOut": "09:50 AM"
+                }
+            ]
+        },
+        {
+            "id": "AATS - 0006",
+            "name": "CHRISTIAN JADE TALABO",
+            "image": "./Images/AATS-0006.jpg",
+            "log": [
+                {
+                    "status": "absent",
+                    "date": "",
+                    "timeIn": "",
+                    "timeOut": ""
+                }
+            ]
+        },
+        {
+            "id": "AATS - 0007",
+            "name": "MAYNARD ANTHONY DANTES VALDEZ",
+            "image": "./Images/AATS-0007.jpg",
+            "log": [
+                {
+                    "status": "absent",
+                    "date": "",
+                    "timeIn": "",
+                    "timeOut": ""
+                }
+            ]
+        },
+        {
+            "id": "AATS - 0008",
+            "name": "ALDAVE DE JESUS LOZADA",
+            "image": "./Images/AATS-0008.jpg",
+            "log": [
+                {
+                    "status": "absent",
+                    "date": "",
+                    "timeIn": "",
+                    "timeOut": ""
+                }
+            ]
+        },
+        {
+            "id": "AATS - 0009",
+            "name": "KENJI S CA-ANG",
+            "image": null,
+            "log": [
+                {
+                    "status": "absent",
+                    "date": "",
+                    "timeIn": "",
+                    "timeOut": ""
+                }
+            ]
+        },
+        {
+            "id": "AATS - 0010",
+            "name": "MARK KENNETH G. CACHO",
+            "image": null,
+            "log": [
+                {
+                    "status": "absent",
+                    "date": "",
+                    "timeIn": "",
+                    "timeOut": ""
+                }
+            ]
+        },
+        {
+            "id": "AATS - 0011",
+            "name": "BENEDICT FLORES SALES",
+            "image": "./Images/AATS-0011.jpg",
+            "log": [
+                {
+                    "status": "absent",
+                    "date": "",
+                    "timeIn": "",
+                    "timeOut": ""
+                }
+            ]
+        },
+        {
+            "id": "AATS - 0012",
+            "name": "JUNRAIN PANSOy",
+            "image": "./Images/AATS-0012.jpg",
+            "log": [
+                {
+                    "status": "absent",
+                    "date": "",
+                    "timeIn": "",
+                    "timeOut": ""
+                }
+            ]
+        },
+        {
+            "id": "AATS - 0013",
+            "name": "MARIC BELASANO",
+            "image": null,
+            "log": [
+                {
+                    "status": "absent",
+                    "date": "",
+                    "timeIn": "",
+                    "timeOut": ""
+                }
+            ]
+        },
+        {
+            "id": "AATS - 0014",
+            "name": "PAULO SAYSAY ORTEGA",
+            "image": "./Images/AATS-0014.jpg",
+            "log": [
+                {
+                    "status": "absent",
+                    "date": "",
+                    "timeIn": "",
+                    "timeOut": ""
+                }
+            ]
+        },
+        {
+            "id": "AATS - 0015",
+            "name": "JEFF ROGAS",
+            "image": "./Images/AATS-0015.jpg",
+            "log": [
+                {
+                    "status": "absent",
+                    "date": "",
+                    "timeIn": "",
+                    "timeOut": ""
+                }
+            ]
+        }
+    ]
+}

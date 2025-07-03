@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 import json
 import pandas as pd
 import tkinter.messagebox as messagebox
+from openpyxl import Workbook, load_workbook
 
 class main:
     def __init__(self):
@@ -202,6 +203,23 @@ class main:
         with open(json_path, "r") as f:
             data = json.load(f)
 
+        try:
+            book = Workbook()
+            book.remove(book.active)  # Remove default sheet
+        except Exception as e:
+            print("Workbook error:", e)
+            return False
+
+
+        for emp in data["employees"]:
+            sheet_name = emp["name"][:31]  # Excel limits sheet names to 31 chars
+            ws = book.create_sheet(title=sheet_name)
+
+            ws.append([
+                "Month", "Week", "Day", "Date", "Pay Period", "Shift", "IN/OUT", "Salary/Day",
+                "Overtime", "Extra", "Deduction", "Total Hours", "Amount", "Payout"
+            ])
+
             flat_rows = []
 
             for emp in data["employees"]:
@@ -218,12 +236,11 @@ class main:
                     df = pd.DataFrame(flat_rows)
 
         try:
-            df.to_excel(excel_path, index=False)
+            book.save(excel_path)
             return True
         except PermissionError:
             messagebox.showerror("Save Error",
                                  f"Cannot save the file because {excel_path} is open.\nPlease close it and try again.")
-            print(f"CANNOT CLOSE APPLICATION AS THE {excel_path} EXCEL SHEET IS OPENED. PLEASE CLOSE THE EXCEL FIRST")
             return False
 
     def run(self):
