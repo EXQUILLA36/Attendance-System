@@ -33,4 +33,4 @@ def employees_route():
     return jsonify(get_db_connection())  # ✅ JSONify only here
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
