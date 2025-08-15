@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./menu.css";
+import EmployeeList from "./employeeList.jsx";
 import Attendance from "./attendance.jsx";
 
 export default function Menu() {
@@ -16,6 +17,8 @@ export default function Menu() {
     switch (activePage) {
       case "attendance":
         return <Attendance />;
+      case "employeeList":
+        return <EmployeeList />;
       default:
         return <div>Welcome to the Dashboard</div>;
     }
@@ -32,10 +35,11 @@ export default function Menu() {
         <ul className="flex flex-col gap-4 mt-4 text-[1.2rem] text-gray-500 px-2.5">
           <li><button className="navBtn" onClick={() => setActivePage("dashboard")}>Dashboard</button></li>
           <li><button className="navBtn" onClick={() => setActivePage("attendance")}>Attendance</button></li>
+          <li><button className="navBtn" onClick={() => setActivePage("employeeList")}>Employee List</button></li>
         </ul>
       </div>
 
-      <div className="main p-[2%] font-sans">
+      <div className="main p-[2%] h-[92vh] overflow-y-scroll bg-[#e0e5ec] font-sans">
         {handleNavigation()}
       </div>
     </div>
